@@ -6,15 +6,20 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
-const HyperswitchScancard = NativeModules.HyperswitchScancard ? NativeModules.HyperswitchScancard : new Proxy(
-  {},
-  {
-    get() {
-      throw new Error(LINKING_ERROR);
-    },
-  }
-);
+const HyperswitchScancard = NativeModules.HyperswitchScancard
+  ? NativeModules.HyperswitchScancard
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
 
-export function launchScanCard(a: string, b: (s: Record<string, any>) => void): void {
-  return HyperswitchScancard.launchScanCard(a, b);
+export function launchScanCard(
+  scanCardRequest: string,
+  scanCardCallback: (s: Record<string, any>) => void
+): void {
+  return HyperswitchScancard.launchScanCard(scanCardRequest, scanCardCallback);
 }
