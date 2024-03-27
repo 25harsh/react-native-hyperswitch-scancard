@@ -12,7 +12,6 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - hermes-engine (0.11.0)
-  - HyperswitchScanCard (1.0.0)
   - libevent (2.1.12)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -239,7 +238,6 @@ PODS:
   - React-logger (0.68.2):
     - glog
   - react-native-hyperswitch-scancard (0.1.0):
-    - HyperswitchScanCard
     - React-Core
   - React-perflogger (0.68.2)
   - React-RCTActionSheet (0.68.2):
@@ -315,7 +313,6 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (~> 0.11.0)
-  - HyperswitchScanCard (from `/Users/harshit.srivastava/localpod/hyperscan`)
   - libevent (~> 2.1.12)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -365,8 +362,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  HyperswitchScanCard:
-    :path: "/Users/harshit.srivastava/localpod/hyperscan"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -432,7 +427,6 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 476ee3e89abb49e07f822b48323c51c57124b572
   hermes-engine: 84e3af1ea01dd7351ac5d8689cbbea1f9903ffc3
-  HyperswitchScanCard: f13c7d222dfcadb08c6db0d8c9cfe8e5ec28dae3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 3e917ea5377751094f38145fdece525aa90545a0
@@ -448,7 +442,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b7b553412f2ec768fe6c8f27cd6bafdb9d8719e6
   React-jsinspector: c5989c77cb89ae6a69561095a61cce56a44ae8e8
   React-logger: a0833912d93b36b791b7a521672d8ee89107aff1
-  react-native-hyperswitch-scancard: 4a28f2bd6cca420be94981dde0677cd969914388
+  react-native-hyperswitch-scancard: 9fe0be4a9362524edec07f1d13788fd8af38eeb2
   React-perflogger: a18b4f0bd933b8b24ecf9f3c54f9bf65180f3fe6
   React-RCTActionSheet: 547fe42fdb4b6089598d79f8e1d855d7c23e2162
   React-RCTAnimation: bc9440a1c37b06ae9ebbb532d244f607805c6034

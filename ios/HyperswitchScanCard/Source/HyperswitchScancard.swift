@@ -1,5 +1,4 @@
 
-import HyperswitchScanCard //TBD
 @objc(HyperswitchScancard)
 class HyperswitchScancard: NSObject {
 
