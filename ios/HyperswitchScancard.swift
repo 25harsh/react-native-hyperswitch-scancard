@@ -1,5 +1,5 @@
 
-import HyperswitchCardScan //TBD
+import HyperswitchScanCard //TBD
 @objc(HyperswitchScancard)
 class HyperswitchScancard: NSObject {
 
@@ -7,7 +7,8 @@ class HyperswitchScancard: NSObject {
     func launchScanCard(_ rnMessage: String, _ rnCallback: @escaping RCTResponseSenderBlock) {
 
         DispatchQueue.main.async {
-            var message: Dictionary<String, Any> = [:]
+            var message: [String:Any] = [:]
+            var callback: [String:Any] = [:]
             let cardScanSheet = CardScanSheet()
             cardScanSheet.present(from: RCTPresentedViewController()!) { result in
 
@@ -17,14 +18,16 @@ class HyperswitchScancard: NSObject {
                     message["name"] = card?.name
                     message["expiryMonth"] =  card?.expiryMonth
                     message["expiryYear"] =  card?.expiryYear
+                    callback["status"] = "Succeeded"
+                    callback["data"] = message
 
                 case .canceled:
-                    message["error"] = "Scan Canceled"
+                    callback["status"] = "Cancelled"
                 case .failed(let error):
-                    message["error"] = "Failed with error: \(error.localizedDescription)"
+                    callback["status"] = "Failed"
 
                 }
-                rnCallback([message])
+                rnCallback([callback])
             }
         }
     }
