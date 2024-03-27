@@ -1,43 +1,42 @@
 package com.reactnativehyperswitchscancard
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.facebook.react.bridge.Arguments
 import io.hyperswitch.android.hscardscan.cardscan.CardScanSheet
 import io.hyperswitch.android.hscardscan.cardscan.CardScanSheetResult
-
 
 class HSScanCardActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val cardScanSheet = CardScanSheet.create(this, ::onScanFinished)
-    cardScanSheet.present();
-
+    cardScanSheet.present()
   }
 
   override fun onBackPressed() {
     super.onBackPressed()
-    finish();
+    finish()
   }
 
   private fun onScanFinished(result: CardScanSheetResult) {
     val map = Arguments.createMap()
     when (result) {
       is CardScanSheetResult.Completed -> {
-        map.putString("status", "success")
-        map.putString("cardNumber", result.scannedCard.pan)
+        map.putString("status", "Succeeded")
+        val dataMap = Arguments.createMap()
+        dataMap.putString("pan", result.scannedCard.pan)
+        map.putMap("data", dataMap)
         ScanCardLauncher.callback.invoke(map)
-        finish();
-
+        finish()
       }
 
       is CardScanSheetResult.Canceled -> {
-        map.putString("status", "cancelled")
-        finish();
+        map.putString("status", "Cancelled")
+        finish()
       }
 
       is CardScanSheetResult.Failed -> {
-        map.putString("status", "failure")
-        finish();
+        map.putString("status", "Failed")
+        finish()
       }
     }
   }

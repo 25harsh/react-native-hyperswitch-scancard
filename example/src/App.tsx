@@ -18,12 +18,14 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text>Card Number: {result == undefined ? '' : result.cardNumber}</Text>
+        <Text>Card Number: {result == undefined ? '' : result.data.pan}</Text>
         {/* <Text>Card Holder Name: {result == undefined? "" : result.name}</Text>r */}
         <Text>
-          Expiry Month: {result == undefined ? '' : result.expiryMonth}
+          Expiry Month: {result == undefined ? '' : result.data.expiryMonth}
         </Text>
-        <Text>Expiry Year: {result == undefined ? '' : result.expiryYear}</Text>
+        <Text>
+          Expiry Year: {result == undefined ? '' : result.data.expiryYear}
+        </Text>
         <Button onPress={launch} title="relaunch scan card" color="#841584" />
       </View>
     </SafeAreaView>
