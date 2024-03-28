@@ -2,15 +2,26 @@ buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['HyperswitchScancard_kotlinVersion']
 
+
+  parent.allprojects {
+    repositories {
+      // TODO  host local mavenRepo to S3 && add same to SDK gradle
+      maven {
+        url("$rootDir/../../android/scancard-local-mavenRepo")
+      }
+    }
+  }
   repositories {
     google()
     mavenCentral()
   }
 
+
   dependencies {
     classpath 'com.android.tools.build:gradle:3.5.3'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
   }
 }
 
@@ -20,6 +31,7 @@ def isNewArchitectureEnabled() {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+
 
 if (isNewArchitectureEnabled()) {
   apply plugin: 'com.facebook.react'
@@ -73,10 +85,8 @@ repositories {
   if (rootProject.ext.has('reactNativeAndroidRoot')) {
     defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
   } else {
-    defaultDir = new File(
-      projectDir,
-      '/../../../node_modules/react-native/android'
-    )
+    defaultDir = new File(projectDir,
+      '/../../../node_modules/react-native/android')
   }
 
   if (defaultDir.exists()) {
@@ -94,15 +104,11 @@ repositories {
       if (found) return true
       parentDir = parentDir.parentFile
 
-      def androidSourcesDir = new File(
-        parentDir,
-        'node_modules/react-native'
-      )
+      def androidSourcesDir = new File(parentDir,
+        'node_modules/react-native')
 
-      def androidPrebuiltBinaryDir = new File(
-        parentDir,
-        'node_modules/react-native/android'
-      )
+      def androidPrebuiltBinaryDir = new File(parentDir,
+        'node_modules/react-native/android')
 
       if (androidPrebuiltBinaryDir.exists()) {
         maven {
@@ -125,10 +131,7 @@ repositories {
   }
 
   if (!found) {
-    throw new GradleException(
-      "${project.name}: unable to locate React Native android sources. " +
-        "Ensure you have you installed React Native as a dependency in your project and try again."
-    )
+    throw new GradleException("${project.name}: unable to locate React Native android sources. " + "Ensure you have you installed React Native as a dependency in your project and try again.")
   }
 }
 
@@ -145,10 +148,12 @@ dependencies {
   implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
   implementation 'org.tensorflow:tensorflow-lite:2.11.0'
   implementation 'org.tensorflow:tensorflow-lite-support:0.4.3'
-  implementation files("./scancard-aar-lib/hscardscan-release.aar")
-  implementation files("./scancard-aar-lib/camera-core-release.aar")
-  implementation files("./scancard-aar-lib/base-release.aar")
-  implementation files("./scancard-aar-lib/cardscan-release.aar")
+  implementation 'io.hyperswitch:base-release:1.0.0'
+  implementation 'io.hyperswitch:camera-core-release:1.0.0'
+  implementation 'io.hyperswitch:cardscan-release:1.0.0'
+  implementation 'io.hyperswitch:hscardscan-release:1.0.0'
+
+
 // From node_modules
 }
 
