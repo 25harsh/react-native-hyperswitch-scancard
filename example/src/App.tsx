@@ -1,41 +1,26 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, SafeAreaView, Button } from 'react-native';
-import { launchScanCard } from 'react-native-hyperswitch-scancard';
+import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import { ScanCardModule, ScanCardReturnType} from 'react-native-hyperswitch-scancard';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function App() {
-  const [result, setResult] = React.useState<Record<string, any> | undefined>();
+  const [result, setResult] = React.useState<ScanCardReturnType | null>(null);
 
-  const callbackFunction = (result: Record<string, any>) => {
-  console.log("Scan result:", result);
-  setResult(result)
+  const handleScanCardCallback = (scanData: ScanCardReturnType | null) => {
+    setResult(scanData);
+    console.log(scanData);
+  };
 
-};
-
-function launch() {
-  launchScanCard(inputString, callbackFunction)
-}
-
-const inputString = "YourInputString";
-
-  React.useEffect(() => {
-    launchScanCard(inputString, callbackFunction);
-  }, []);
-
-
+  var button = <Text style={styles.button}>Start Scan</Text>
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text>Card Number: {result == undefined? "" : result.pan}</Text>
-        {/* <Text>Card Holder Name: {result == undefined? "" : result.name}</Text>r */}
-        <Text>Expiry Month: {result == undefined? "" : result.expiryMonth}</Text>
-        <Text>Expiry Year: {result == undefined? "" : result.expiryYear}</Text>
-        <Button
-  onPress={launch}
-  title="relaunch scan card"
-  color="#841584"
-/>
+      <Text>Card Number: {result?.data?.pan}</Text>
+      <Text>Expiry Month: {result?.data?.expiryMonth}</Text>
+      <Text>Expiry Year: {result?.data?.expiryYear}</Text>
+      <ScanCardModule.ScanCardComponent buttonView = {button} callback={handleScanCardCallback}/>
       </View>
     </SafeAreaView>
   );
@@ -46,6 +31,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    backgroundColor: "red"
   },
   box: {
     width: '100%',
