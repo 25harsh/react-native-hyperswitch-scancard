@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 import {
-  ScanCardModule,
+  ScanCardComponent,
   ScanCardReturnType,
 } from 'react-native-hyperswitch-scancard';
-// import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function App() {
   const [result, setResult] = React.useState<ScanCardReturnType | null>(null);
@@ -15,18 +14,15 @@ export default function App() {
     console.log(scanData);
   };
 
-  var button = <Text style={styles.button}>Start Scan</Text>;
-
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <Text>Card Number: {result?.data?.pan}</Text>
         <Text>Expiry Month: {result?.data?.expiryMonth}</Text>
         <Text>Expiry Year: {result?.data?.expiryYear}</Text>
-        <ScanCardModule.ScanCardComponent
-          buttonView={button}
-          callback={handleScanCardCallback}
-        />
+        <ScanCardComponent callback={handleScanCardCallback}>
+          <Text style={styles.button}>Start Scan</Text>
+        </ScanCardComponent>
       </View>
     </SafeAreaView>
   );

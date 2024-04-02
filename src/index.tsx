@@ -1,9 +1,14 @@
 import React from 'react';
-import { NativeModules, TouchableOpacity } from 'react-native';
+import {
+  NativeModules,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 
 const HyperswitchScancard = NativeModules.HyperswitchScancard || null;
 
-const isAvailable = HyperswitchScancard != null;
+const isAvailable = HyperswitchScancard && HyperswitchScancard.launchScanCard;
 
 export interface ScanCardReturnType {
   status: string;
@@ -16,13 +21,11 @@ interface ScanCardData {
   expiryYear: string;
 }
 
-function launchScanCard(
-  message: string,
-  callback: (s: ScanCardReturnType) => void
-): void {
-  if (HyperswitchScancard) {
+function launchScanCard(callback: (s: ScanCardReturnType) => void): void {
+  console.log(HyperswitchScancard);
+  if (isAvailable) {
     return HyperswitchScancard.launchScanCard(
-      message,
+      '',
       (response: Record<string, any>) => {
         const status = response.status || 'Default';
         const data: ScanCardData | undefined = response.data;
@@ -44,25 +47,24 @@ function launchScanCard(
 
 interface ScanCardProps {
   callback: (data: ScanCardReturnType) => void;
-  buttonView: React.ReactNode;
+  style?: StyleProp<ViewStyle> | undefined;
 }
 
 const ScanCardComponent: React.FC<ScanCardProps> = ({
-  buttonView,
+  children,
   callback,
+  style,
 }) => {
-  if (HyperswitchScancard) {
+  if (isAvailable) {
     return (
-      <TouchableOpacity onPress={() => launchScanCard('', callback)}>
-        {buttonView}
+      <TouchableOpacity onPress={() => launchScanCard(callback)} style={style}>
+        {children}
       </TouchableOpacity>
     );
   } else {
+    console.warn('Scan Card feature unavailable');
     return null;
   }
 };
 
-export const ScanCardModule = {
-  ScanCardComponent,
-  isAvailable,
-};
+export { ScanCardComponent, isAvailable, launchScanCard };
