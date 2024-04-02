@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import {
   ScanCardComponent,
   ScanCardReturnType,
+  isAvailable,
+  launchScanCard
 } from 'react-native-hyperswitch-scancard';
 
 export default function App() {
@@ -21,8 +23,13 @@ export default function App() {
         <Text>Expiry Month: {result?.data?.expiryMonth}</Text>
         <Text>Expiry Year: {result?.data?.expiryYear}</Text>
         <ScanCardComponent callback={handleScanCardCallback}>
-          <Text style={styles.button}>Start Scan</Text>
+          <Text style={styles.button}>Start Scan [Component]</Text>
         </ScanCardComponent>
+       {isAvailable &&
+        <TouchableOpacity onPress={() => launchScanCard(handleScanCardCallback)} >
+          <Text style={styles.button}>Start Scan [Function]</Text>
+          </TouchableOpacity>
+    }
       </View>
     </SafeAreaView>
   );
@@ -35,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: 'red',
+    color: 'blue'
   },
   box: {
     width: '100%',
