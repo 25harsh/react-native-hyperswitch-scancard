@@ -1,25 +1,68 @@
-import { NativeModules, Platform } from 'react-native';
+import React from 'react';
+import { NativeModules, TouchableOpacity } from 'react-native';
 
-const LINKING_ERROR =
-  `The package 'react-native-hyperswitch-scancard' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo managed workflow\n';
+const HyperswitchScancard = NativeModules.HyperswitchScancard || null;
 
-const HyperswitchScancard = NativeModules.HyperswitchScancard
-  ? NativeModules.HyperswitchScancard
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
+const isAvailable = HyperswitchScancard != null;
+
+export interface ScanCardReturnType {
+  status: string;
+  data?: ScanCardData;
+}
+
+interface ScanCardData {
+  pan: string;
+  expiryMonth: string;
+  expiryYear: string;
+}
+
+function launchScanCard(
+  message: string,
+  callback: (s: ScanCardReturnType) => void
+): void {
+  if (HyperswitchScancard) {
+    return HyperswitchScancard.launchScanCard(
+      message,
+      (response: Record<string, any>) => {
+        const status = response.status || 'Default';
+        const data: ScanCardData | undefined = response.data;
+        const scanData: ScanCardReturnType = {
+          status,
+          data: data
+            ? {
+                pan: data.pan || '',
+                expiryMonth: data.expiryMonth || '',
+                expiryYear: data.expiryYear || '',
+              }
+            : undefined,
+        };
+        callback(scanData);
       }
     );
-
-export function launchScanCard(
-  scanCardRequest: string,
-  scanCardCallback: (s: Record<string, any>) => void
-): void {
-  return HyperswitchScancard.launchScanCard(scanCardRequest, scanCardCallback);
+  }
 }
+
+interface ScanCardProps {
+  callback: (data: ScanCardReturnType) => void;
+  buttonView: React.ReactNode;
+}
+
+const ScanCardComponent: React.FC<ScanCardProps> = ({
+  buttonView,
+  callback,
+}) => {
+  if (HyperswitchScancard) {
+    return (
+      <TouchableOpacity onPress={() => launchScanCard('', callback)}>
+        {buttonView}
+      </TouchableOpacity>
+    );
+  } else {
+    return null;
+  }
+};
+
+export const ScanCardModule = {
+  ScanCardComponent,
+  isAvailable,
+};
