@@ -5,7 +5,7 @@ import {
   ScanCardModule,
   ScanCardReturnType,
 } from 'react-native-hyperswitch-scancard';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+// import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function App() {
   const [result, setResult] = React.useState<ScanCardReturnType | null>(null);
