@@ -6,7 +6,7 @@ RCT_EXTERN_METHOD(launchScanCard: (NSString)rnMessage :(RCTResponseSenderBlock)r
 
 + (BOOL)requiresMainQueueSetup
 {
-  return NO;
+    return NO;
 }
 
 @end
