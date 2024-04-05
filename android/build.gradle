@@ -5,9 +5,8 @@ buildscript {
 
   parent.allprojects {
     repositories {
-      // TODO  host local mavenRepo to S3 && add same to SDK gradle
       maven {
-        url("$rootDir/../../android/scancard-local-mavenRepo")
+        url "https://maven.hyperswitch.io/release/production/android/maven/1.4.3"
       }
     }
   }
