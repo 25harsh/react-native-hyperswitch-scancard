@@ -6,7 +6,7 @@ buildscript {
   parent.allprojects {
     repositories {
       maven {
-        url "https://maven.hyperswitch.io/release/production/android/maven/1.4.3"
+        url "https://maven.hyperswitch.io/release/production/android/maven/1.0.9"
       }
     }
   }

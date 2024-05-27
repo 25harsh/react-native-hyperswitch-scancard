@@ -5,6 +5,7 @@
     <application>
         <activity
             android:name=".HSScanCardActivity"
+            android:theme="@style/TransparentTheme"
             android:exported="false" />
     </application>
 
