@@ -1,14 +1,16 @@
 import React from 'react';
-import {
-  NativeModules,
-  TouchableOpacity,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
 
-const HyperswitchScancard = NativeModules.HyperswitchScancard || null;
+declare const window: any;
 
-const isAvailable = HyperswitchScancard && HyperswitchScancard.launchScanCard;
+const isAvailable =
+  typeof window !== 'undefined' &&
+  window.webkit !== undefined &&
+  window.webkit.messageHandlers &&
+  window.webkit.messageHandlers.launchScanCard;
+
+interface MessageEvent {
+  data: any;
+}
 
 export interface ScanCardReturnType {
   status: string;
@@ -21,13 +23,13 @@ interface ScanCardData {
   expiryYear: string;
 }
 
-function launchScanCard(callback: (s: ScanCardReturnType) => void): void {
+function launchScanCard(callback: (data: ScanCardReturnType) => void): void {
   if (isAvailable) {
-    return HyperswitchScancard.launchScanCard(
-      '',
-      (response: Record<string, any>) => {
-        const status = response.status || 'Default';
-        const data: ScanCardData | undefined = response.data;
+    const handleMessage = (event: MessageEvent) => {
+      let scanCardData = JSON.parse(event.data).scanCardData;
+      if (scanCardData) {
+        const status = scanCardData.status || 'Default';
+        const data: ScanCardData | undefined = scanCardData.data;
         const scanData: ScanCardReturnType = {
           status,
           data: data
@@ -39,14 +41,18 @@ function launchScanCard(callback: (s: ScanCardReturnType) => void): void {
             : undefined,
         };
         callback(scanData);
+        window.removeEventListener('message', handleMessage);
       }
-    );
+    };
+
+    window.addEventListener('message', handleMessage);
+    window.webkit.messageHandlers.launchScanCard.postMessage('launchScanCard');
   }
 }
 
 interface ScanCardProps {
   callback: (data: ScanCardReturnType) => void;
-  style?: StyleProp<ViewStyle> | undefined;
+  style?: React.CSSProperties;
 }
 
 const ScanCardComponent: React.FC<ScanCardProps> = ({
@@ -56,9 +62,9 @@ const ScanCardComponent: React.FC<ScanCardProps> = ({
 }) => {
   if (isAvailable) {
     return (
-      <TouchableOpacity onPress={() => launchScanCard(callback)} style={style}>
+      <div onClick={() => launchScanCard(callback)} style={style}>
         {children}
-      </TouchableOpacity>
+      </div>
     );
   } else {
     console.warn('Scan Card feature unavailable');
