@@ -4,9 +4,8 @@ declare const window: any;
 
 const isAvailable =
   typeof window !== 'undefined' &&
-  window.webkit !== undefined &&
-  window.webkit.messageHandlers &&
-  window.webkit.messageHandlers.launchScanCard;
+  (window.webkit?.messageHandlers?.launchScanCard ||
+    window.AndroidInterface?.launchScanCard);
 
 interface MessageEvent {
   data: any;
@@ -26,7 +25,15 @@ interface ScanCardData {
 function launchScanCard(callback: (data: ScanCardReturnType) => void): void {
   if (isAvailable) {
     const handleMessage = (event: MessageEvent) => {
-      let scanCardData = JSON.parse(event.data).scanCardData;
+      let messageData;
+      try {
+        messageData =
+          typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      } catch (error) {
+        console.error('Error parsing message data:', error, event.data);
+        return;
+      }
+      const scanCardData = messageData.scanCardData;
       if (scanCardData) {
         const status = scanCardData.status || 'Default';
         const data: ScanCardData | undefined = scanCardData.data;
@@ -46,7 +53,13 @@ function launchScanCard(callback: (data: ScanCardReturnType) => void): void {
     };
 
     window.addEventListener('message', handleMessage);
-    window.webkit.messageHandlers.launchScanCard.postMessage('launchScanCard');
+    if (window.webkit?.messageHandlers?.launchScanCard) {
+      window.webkit.messageHandlers.launchScanCard.postMessage(
+        'launchScanCard'
+      );
+    } else if (window.AndroidInterface?.launchScanCard) {
+      window.AndroidInterface.launchScanCard('launchScanCard');
+    }
   }
 }
 
