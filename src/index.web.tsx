@@ -25,15 +25,7 @@ interface ScanCardData {
 function launchScanCard(callback: (data: ScanCardReturnType) => void): void {
   if (isAvailable) {
     const handleMessage = (event: MessageEvent) => {
-      let messageData;
-      try {
-        messageData =
-          typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-      } catch (error) {
-        console.error('Error parsing message data:', error, event.data);
-        return;
-      }
-      const scanCardData = messageData.scanCardData;
+      let scanCardData = JSON.parse(event.data).scanCardData;
       if (scanCardData) {
         const status = scanCardData.status || 'Default';
         const data: ScanCardData | undefined = scanCardData.data;
