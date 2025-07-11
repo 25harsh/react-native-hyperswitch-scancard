@@ -17,8 +17,8 @@ Pod::Spec.new do |s|
   s.source               = { :git => "https://github.com/harsh-Juspay/react-native-hyperswitch-scancard.git", :tag => "#{s.version}" }
   s.frameworks           = 'Foundation', 'UIKit'
   s.weak_framework       = 'AVKit', 'CoreML', 'VideoToolbox', 'Vision', 'AVFoundation'
-  s.source_files         = "ios/**/*.{h,m,mm,swift}"
-  s.ios.resource_bundle  = { 'HyperswitchScanCardBundle' => 'ios/HyperswitchScanCard/Resources/**/*.{lproj,mlmodelc}' }
+  s.source_files         = "ios/Source/**/*.{h,m,mm,swift}"
+  s.vendored_frameworks  = "ios/Frameworks/HyperswitchScanCard.xcframework"
 
   s.dependency "React-Core"
 
